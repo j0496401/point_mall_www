@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import ItemBox from './ItemBox';
+import DataHelper from '../DataHelper';
 import { withRouter } from 'react-router-dom';
 
 
@@ -39,13 +40,13 @@ class CartItems extends React.Component {
             });
         }
         axios.post(
-            'http://localhost:8003/items/purchase/',
+            DataHelper.baseURL() + '/items/purchase/',
             {
                 items
             },
             {
                 headers: {
-                    'Authorization': localStorage.getItem('authorization')
+                    'Authorization': DataHelper.getAuthToken()
                 }
             }
         ).then((response) => {

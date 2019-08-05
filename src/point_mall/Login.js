@@ -1,6 +1,7 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
 import axios from 'axios';
+import DataHelper from '../DataHelper';
 
 class Login extends React.Component {
 
@@ -28,7 +29,7 @@ class Login extends React.Component {
 
     login = () => {
         axios.post(
-            'http://localhost:8003/o/token/',
+            DataHelper.baseURL() + '/o/token/',
                 {
                     "grant_type": "password",
                     "client_id": "j51MYqWX7AQmb8vt5sfuG40RRI7uWzUmcGtmtb3j",
@@ -37,7 +38,7 @@ class Login extends React.Component {
                 }
             ).then((Response) => {
                 const token = Response.data;
-                localStorage.setItem('authorization', token.token_type + ' ' + token.access_token);
+                DataHelper.setAuthToken(token);
                 this.props.history.push('/');
         });
         // const authorization = 'Basic ' + btoa(this.state.username + ":" + this.state.password);
