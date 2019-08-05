@@ -15,11 +15,11 @@ class Login extends React.Component {
 
     onInputChanged = (event) => {
         const target = event.target;
-        if (target.name == 'username') {
+        if (target.name === 'username') {
             this.setState({
                 username: target.value
             });
-        } else if (target.name == 'password') {
+        } else if (target.name === 'password') {
             this.setState({
                 password: target.value
             });
@@ -31,7 +31,7 @@ class Login extends React.Component {
             'http://localhost:8003/o/token/',
                 {
                     "grant_type": "password",
-                    "client_id": "PGibTNCMd696sgVfv4z5KopbXahfzziPJa4TNKck",
+                    "client_id": "j51MYqWX7AQmb8vt5sfuG40RRI7uWzUmcGtmtb3j",
                     "username": this.state.username,
                     "password": this.state.password
                 }

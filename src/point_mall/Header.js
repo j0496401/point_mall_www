@@ -37,6 +37,7 @@ class Header extends React.Component{
                 {categories}
 
                 <div className="header-right">
+                    <Link to="/cart/items">Cart</Link>
                     <Link to="/me/items">My Items</Link>
                     <Link to="/login">Login</Link>
                 </div>

@@ -9,6 +9,7 @@ import Login from './point_mall/Login';
 import CategoryItems from './point_mall/CategoryItems';
 import ItemDetail from './point_mall/ItemDetail';
 import MyItems from './point_mall/MyItems';
+import CartItems from './point_mall/CartItems';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route exact path= "/categories/:categoryId" component={CategoryItems} />
           <Route exact path= "/items/:itemId" component={ItemDetail} />
           <Route exact path="/me/items" component={MyItems} />
+          <Route exact path="/cart/items" component={CartItems} />
         </Switch>
         <Footer/>
       </div>
