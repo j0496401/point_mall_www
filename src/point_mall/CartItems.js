@@ -3,40 +3,20 @@ import axios from 'axios';
 import ItemBox from './ItemBox';
 import DataHelper from '../DataHelper';
 import { withRouter } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 
+@inject ('authStore', 'itemStore')
+@observer
 
 class CartItems extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            CartItems: [],
-            purchaseItemsQueue: []
-        }
-    }
-
-    componentDidMount() {
-        this.indexItems();
-    }
-
-    indexItems = () => {
-        let CartItems = localStorage.getItem('cart_items');
-        if (CartItems == null || CartItems.length < 1) {
-            CartItems = [];
-        } else {
-            CartItems = JSON.parse(CartItems);
-        }
-        this.setState({
-            CartItems
-        });
-    }
-
     purchase = () => {
         const items = [];
-        for (let CartItem of this.state.CartItems) {
+        const { authStore, itemStore } = this.props;
+        for (let cartItem of itemStore.cartItems) {
             items.push({
-                item_id : CartItem.item.id,
-                count : CartItem.count
+                item_id : cartItem.item.id,
+                count : cartItem.count
             });
         }
         axios.post(
@@ -46,21 +26,22 @@ class CartItems extends React.Component {
             },
             {
                 headers: {
-                    'Authorization': DataHelper.getAuthToken()
+                    'Authorization': authStore.authToken
                 }
             }
         ).then((response) => {
+            itemStore.clearCartItmes();
             localStorage.removeItem('cart_items');
-            this.props.history.push('/me/items');
         });
     }
 
 
     render() {
-        const items = this.state.CartItems.map((CartItems) => {
-            const item = CartItems.item;
+        const { itemStore } = this.props;
+        const items = itemStore.cartItems.map((cartItems) => {
+            const item = cartItems.item;
             return (
-                <ItemBox key={item.id} item={item} count={CartItems.count} />
+                <ItemBox key={item.id} item={item} count={cartItems.count} />
             )
         });
 
