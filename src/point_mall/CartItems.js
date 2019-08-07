@@ -49,6 +49,7 @@ class CartItems extends React.Component {
             <div id="container">
                 <h1>장바구니</h1>
                 <button onClick={this.purchase}>구입</button>
+                <button onClick={this.clearItem}>비우기</button>
                 <div id="item-list-container">
                     {items}
                 </div>
