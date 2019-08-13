@@ -1,19 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Axios from 'axios';
-import DataHelper from '../DataHelper'
-import { observer } from 'mobx-react';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 
-@inject('authStore', 'itemStore')
+@inject('httpService', 'authStore', 'itemStore')
 @observer
 class Header extends React.Component{
 
-    helper = new DataHelper();
     constructor(props) {
         super(props);
         this.state = {
-            isLoggedIn: this.helper.isLoggedIn,
             categories: []
         };
     }
@@ -22,14 +17,13 @@ class Header extends React.Component{
         this.indexCategories();
     }
     
-    indexCategories(){
-        Axios.get(DataHelper.baseURL() + '/categories')
-        .then((Response) => {
-            const categories = Response.data;
-            this.setState({
-                categories: categories
+    indexCategories() {
+        this.props.httpService.indexCategories()
+            .then(categories => {
+                this.setState({
+                    categories
+                });
             });
-        });
     }
 
     logout = () => {
@@ -52,7 +46,9 @@ class Header extends React.Component{
                 <div className="header-right">
                     <Link to="/cart/items">Cart {itemStore.cartItemsCount}</Link>
                     {
-                        authStore.isLoggedIn && <Link to="/me/items">My Items</Link>
+                        authStore.isLoggedIn ?
+                        <Link to="/me/items">My Items</Link> :
+                        <Link to="/register">Register</Link>
                     }
                     {
                         authStore.isLoggedIn ?

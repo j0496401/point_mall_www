@@ -1,10 +1,9 @@
 import React from 'react';
-import axios from 'axios';
 import ItemBox from './ItemBox';
-import DataHelper from '../DataHelper'
+import { inject } from 'mobx-react';
 
+@inject('authStore', 'httpService')
 class MyItems extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -14,37 +13,23 @@ class MyItems extends React.Component {
     }
 
     componentDidMount() {
-        this.getUser();
+        this.getMe();
         this.indexItems();
     }
 
-    getUser = () => {
-        axios.get(
-            DataHelper.baseURL() + '/me/',
-            {
-                headers: {
-                    'Authorization': DataHelper.getAuthToken()
-                }
-            }
-        ).then((response) => {
-            const user = response.data;
-            this.setState({
-                user: user
+    getMe = () => {
+        this.props.httpService.getMe()
+            .then(user => {
+                this.setState({
+                    user
+                });
             });
-        });
     }
 
-    indexItems = () => {
-        axios.get(DataHelper.baseURL() + '/me/items/',
-            {
-                headers: {
-                    'Authorization': DataHelper.getAuthToken()
-                }
-            }
-        ).then((response) => {
-            const userItems = response.data;
+    indexMyItems = () => {
+        this.props.httpService.indexMyItems(userItems => {
             this.setState({
-                userItems: userItems
+                userItems
             })
         });
     }
@@ -53,16 +38,17 @@ class MyItems extends React.Component {
         const user = this.state.user;
         const point = user ? user.point : 0;
         const items = this.state.userItems.map((userItem) => {
-            const  item = userItem.item;
+            const item = userItem.item;
             return (
-                <ItemBox key= {item.id} item={item} count={userItem.count} />
+                <ItemBox key={item.id}
+                    item={item}
+                    count={userItem.count} />
             )
         });
-
-        return(
+        return (
             <div id="container">
                 <h1>내 아이템 목록</h1>
-                <h2>잔고 : {point} P</h2>
+                <h2>잔고 : {point}P</h2>
                 <div id="item-list-container">
                     {items}
                 </div>

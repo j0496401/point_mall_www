@@ -1,38 +1,31 @@
 import React from 'react';
-import axios from 'axios';
 import ItemBox from './ItemBox';
-import DataHelper from '../DataHelper';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
-@inject ('authStore', 'itemStore')
+@inject('authStore', 'itemStore')
 @observer
-
 class CartItems extends React.Component {
 
     purchase = () => {
         const items = [];
-        const { authStore, itemStore } = this.props;
+        const { itemStore } = this.props;
         for (let cartItem of itemStore.cartItems) {
             items.push({
                 item_id : cartItem.item.id,
                 count : cartItem.count
             });
         }
-        axios.post(
-            DataHelper.baseURL() + '/items/purchase/',
-            {
-                items
-            },
-            {
-                headers: {
-                    'Authorization': authStore.authToken
-                }
-            }
-        ).then((response) => {
-            itemStore.clearCartItmes();
-            localStorage.removeItem('cart_items');
-        });
+        this.props.httpService.purchaseItems(items)
+            .then(userItems => {
+                itemStore.clearCartItmes();
+                this.props.history.push('/me/items')
+            });
+    }
+
+    clearItems = () => {
+        const { itemStore } = this.props;
+        itemStore.clearCartItems();
     }
 
 
@@ -49,7 +42,7 @@ class CartItems extends React.Component {
             <div id="container">
                 <h1>장바구니</h1>
                 <button onClick={this.purchase}>구입</button>
-                <button onClick={this.clearItem}>비우기</button>
+                <button onClick={this.clearItems}>비우기</button>
                 <div id="item-list-container">
                     {items}
                 </div>
