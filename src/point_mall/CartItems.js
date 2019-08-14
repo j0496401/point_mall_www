@@ -3,7 +3,7 @@ import ItemBox from './ItemBox';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
-@inject('authStore', 'itemStore')
+@inject('httpService', 'itemStore')
 @observer
 class CartItems extends React.Component {
 
@@ -12,14 +12,14 @@ class CartItems extends React.Component {
         const { itemStore } = this.props;
         for (let cartItem of itemStore.cartItems) {
             items.push({
-                item_id : cartItem.item.id,
-                count : cartItem.count
+                item_id: cartItem.item.id,
+                count: cartItem.count
             });
         }
         this.props.httpService.purchaseItems(items)
             .then(userItems => {
-                itemStore.clearCartItmes();
-                this.props.history.push('/me/items')
+                itemStore.clearCartItems();
+                this.props.history.push('/me/items');
             });
     }
 
@@ -28,16 +28,16 @@ class CartItems extends React.Component {
         itemStore.clearCartItems();
     }
 
-
     render() {
         const { itemStore } = this.props;
-        const items = itemStore.cartItems.map((cartItems) => {
-            const item = cartItems.item;
+        const items = itemStore.cartItems.map((cartItem) => {
+            const item = cartItem.item;
             return (
-                <ItemBox key={item.id} item={item} count={cartItems.count} />
+                <ItemBox key={item.id}
+                    item={item}
+                    count={cartItem.count} />
             )
         });
-
         return (
             <div id="container">
                 <h1>장바구니</h1>
