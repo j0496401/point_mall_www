@@ -1,16 +1,16 @@
 class PromiseSample {
     constructor(func) {
-        this._then = function() {};
-        this._catch = function() {};
+        this._then = function () { };
+        this._catch = function () { };
 
-        TODO after set then and catch
-        const callThen = function() {
-            this._then();
-        };
-        const callCatch = function() {
-            this._catch();
-        }
-        func(callThen, callCatch);        
+        // TODO after set then and catch
+        // const callThen = function() {
+        //     this._then();    
+        // };
+        // const callCatch = function() {
+        //     this._catch();
+        // }
+        // func(callThen, callCatch);
     }
 
     then(func) {

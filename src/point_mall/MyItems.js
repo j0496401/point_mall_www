@@ -2,7 +2,7 @@ import React from 'react';
 import ItemBox from './ItemBox';
 import { inject } from 'mobx-react';
 
-@inject('authStore', 'httpService')
+@inject('httpService')
 class MyItems extends React.Component {
     constructor(props) {
         super(props);
@@ -14,7 +14,7 @@ class MyItems extends React.Component {
 
     componentDidMount() {
         this.getMe();
-        this.indexItems();
+        this.indexMyItems();
     }
 
     getMe = () => {
@@ -27,11 +27,12 @@ class MyItems extends React.Component {
     }
 
     indexMyItems = () => {
-        this.props.httpService.indexMyItems(userItems => {
-            this.setState({
-                userItems
-            })
-        });
+        this.props.httpService.indexMyItems()
+            .then(userItems => {
+                this.setState({
+                    userItems
+                })
+            });
     }
 
     render() {

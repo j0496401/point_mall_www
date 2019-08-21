@@ -1,4 +1,4 @@
-import { observable, action, computed} from 'mobx';
+import { observable, action, computed } from 'mobx';
 
 export default class ItemStore {
     @observable cartItems = [];
@@ -6,7 +6,7 @@ export default class ItemStore {
     constructor(rootStore) {
         this.rootStore = rootStore;
         let cartItems = localStorage.getItem('cart_items');
-        if (cartItems == null || cartItems.length < 1){
+        if (cartItems == null || cartItems.length < 1) {
             cartItems = [];
         } else {
             cartItems = JSON.parse(cartItems);
@@ -23,7 +23,6 @@ export default class ItemStore {
                 isAdded = true;
                 break;
             }
-
         }
         if (!isAdded) {
             this.cartItems.push({
@@ -40,7 +39,7 @@ export default class ItemStore {
     }
 
     @action
-    clearCartItmes() {
+    clearCartItems() {
         this.cartItems = [];
         this.saveCartItems();
     }

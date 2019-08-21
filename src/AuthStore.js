@@ -17,7 +17,7 @@ export default class AuthStore {
     }
 
     @action deleteToken() {
-        this.rootStore.itemStore.clearCartItems();
+        this.rootStore.itemStore.clearCartItmes();
         localStorage.removeItem('auth_token');
         localStorage.removeItem('refresh_token');
         this.authToken = null;
